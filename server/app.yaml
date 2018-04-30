@@ -1,0 +1,10 @@
+runtime: go
+api_version: go1
+
+skip_files:
+- bin/
+- Makefile
+
+handlers:
+- url: /.*
+  script: _go_app
