@@ -1,0 +1,11 @@
+@font-face {
+    font-family: 'Roboto'; /*a name to be used later*/
+    src: url('http://domain.com/fonts/font.ttf'); /*URL to font*/
+}
+
+body  {
+    background: rgb(53,0,211);
+    background: linear-gradient(0deg, rgba(53,0,211,1) 0%, rgba(0,0,0,1) 100%);
+    color: white;
+    font-family: 'Quicksand', sans-serif;
+}

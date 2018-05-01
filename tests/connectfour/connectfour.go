@@ -14,7 +14,7 @@ var upgrader = websocket.Upgrader{}
 var players = make([]*websocket.Conn, 2)
 
 func main() {
-	http.HandleFunc("/connectfour", connect)
+	http.HandleFunc("/api/connectfour", connect)
 	http.HandleFunc("/home", home)
 	log.Fatal(http.ListenAndServe(addr, nil))
 }
