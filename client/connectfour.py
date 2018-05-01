@@ -3,7 +3,7 @@ import websockets
 import json
 
 # change to actual uri once kevin has deployed server 
-uri = 'ws://localhost:8080/api/connectfour'
+uri = 'ws://35.197.29.97:8080/api/connectfour'
 
 async def connect(uri):
     async with websockets.connect(uri) as websocket:
