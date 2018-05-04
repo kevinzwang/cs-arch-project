@@ -10,9 +10,21 @@ body  {
     margin-bottom: 6em;
 }
 
+@keyframes fadeIn {
+    0% {
+        transform: translateY(20%);
+        opacity: 0
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1
+    }
+}
+
 #content {
     margin-bottom: 6em;
-    box-shadow: 0 0.5rem 5rem rgba(0,0,0,0.6)!important
+    box-shadow: 0 0.5rem 5rem rgba(0,0,0,0.6)!important;
+    animation: 1s ease-out 0s 1 fadeIn;
 }
 
 .navbar-nav {
