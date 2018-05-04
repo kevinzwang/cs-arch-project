@@ -1,6 +1,6 @@
 body  {
-    background: rgb(18, 0, 71);
-    background: linear-gradient(0deg, rgba(53,0,211,1) 0%, rgba(0,0,0,1) 100%);
+    background: rgb(92, 54, 209);
+    background: linear-gradient(0deg, rgb(31, 108, 223) 0%, rgb(138, 35, 223) 100%);
     font-family: 'Quicksand', sans-serif;
     background-attachment: fixed;
 }
@@ -22,17 +22,19 @@ body  {
 
 .navbar-dark .navbar-nav .nav-link  {
     color: white;
-    font-size: 18px
+    font-size: 18px;
+    transition: 0.3s ease-in;
 }
 
 .navbar {
     padding-left: 14em;
     padding-right: 14em;
-    transition: 0.3s ease-in-out;
+    transition: 0.3s ease-in;
 }
 
 .navbar-brand {
-    font-size: 30px
+    font-size: 30px;
+    transition: 0.3s ease-in;
 }
 
 .row {
@@ -64,8 +66,8 @@ code {
 
 .code-block {
     margin-bottom: 2em;
-    background: rgb(18, 0, 71);
-    background: linear-gradient(0deg, rgb(23, 0, 92) 0%, rgb(15, 0, 59) 100%);
+    background: rgb(92, 54, 209);
+    background: linear-gradient(0deg, rgb(63, 24, 126) 0%, rgb(20, 50, 107) 100%);
 }
 
 .navbar-dark .navbar-toggler {
@@ -74,6 +76,10 @@ code {
 
 .navbar-toggler-icon {
     background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgb(255,255,255)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E") !important;
+}
+
+.navbar-toggler:focus {
+    outline:none;
 }
 
 @media (max-width: 992px) {
@@ -87,16 +93,16 @@ code {
     }
 
     .navbar-brand {
-        color:black !important;
+        color:rgb(71, 42, 158) !important;
         font-size: 24px
     }
 
     .nav-link {
-        color:black !important
+        color:rgb(71, 42, 158)  !important
     }
 
     .navbar-toggler-icon {
-        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgb(0,0,0)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E") !important;
+        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgb(71, 42, 158) ' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E") !important;
     }
 }
 
@@ -108,10 +114,10 @@ code {
 }
 
 .navbar.scrolled .navbar-brand {
-    color:black !important;
+    color:rgb(71, 42, 158) !important;
     font-size: 24px
 }
 
 .navbar.scrolled .nav-link {
-    color:black !important
+    color:rgb(71, 42, 158)  !important
 }
