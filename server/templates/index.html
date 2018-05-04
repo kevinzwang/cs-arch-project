@@ -1,17 +1,138 @@
-<html>
+<!doctype html>
+<html lang="en">
 
 <head>
     <title> Bot Game </title>
-    <link rel="stylesheet" href="/assets/css/style.css">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+        crossorigin="anonymous">
+
     <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
+
+    <link rel="stylesheet" href="/assets/css/dracula.css">
+    <!-- <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"> -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 
 <body>
-    <h1> This is the home page. Yay! </h1>
+    
+    <nav class="navbar navbar-expand-lg fixed-top navbar-dark py-4">
+        <a class="navbar-brand font-weight-bold" href="/">Bot Game</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-links" aria-controls="#navbar-links"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-    <p>
-        I made a bot game for my CS Arch final project.
-    </p>
+        <div class="collapse navbar-collapse" id="navbar-links">
+            <ul class="navbar-nav">
+                <li class="nav-item ml-2">
+                    <a class="nav-link" href="#">Games</a>
+                </li>
+                <li class="nav-item ml-2">
+                    <a class="nav-link" href="#">Docs</a>
+                </li>
+                <li class="nav-item ml-2">
+                    <a class="nav-link" href="#">Github</a>
+                </li>
+                <li class="nav-item ml-2">
+                    <a class="nav-link" href="#">Log In</a>
+                </li>
+                <li class="nav-item ml-2">
+                    <a class="nav-link" href="#">Sign Up</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container text-center text-white" id="title">
+        <h1 class="m-5 font-weight-bold">A Game Framework Built to be Hacked</h1>
+        <h4>Final Project for CS Arch</h4>
+    </div>
+
+    <div class="container bg-white p-5 rounded" id="content">
+        <div class="row title">
+            <h4>How it works</h4>
+        </div>
+        <div class="row">
+            <p>
+                Connect to the Game server with our Websocket API to play. It's super easy to use.
+            </p>
+        </div>
+
+        <div class="row title">
+            <h4>Websockets</h4>
+        </div>
+        <div class="row">
+            <p>With Python, it's as easy as:</p>
+        </div>
+        <div class="row code-block rounded shadow">
+            <pre><code>
+async def connect(uri):
+    async with websockets.connect(uri) as websocket:
+        print("connected")
+
+asyncio.get_event_loop().run_until_complete(
+    connect(uri))</code></pre>
+        </div>
+
+        <div class="row title">
+            <h4>Available games</h4>
+        </div>
+        <div class="row">
+            <div class="col-sm-4 my-2">
+                <a href="#" class="card-link">
+                    <div class="card hover-shadow">
+                        <div class="card-body">
+                            <h4 class="card-title">Connect 4</h4>
+                            <p class="card-text">Play Connect 4 with other bots live. Good for beginners.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-4 my-2">
+                <a href="#" class="card-link">
+                    <div class="card hover-shadow">
+                        <div class="card-body">
+                            <h4 class="card-title">Tetris</h4>
+                            <p class="card-text">Play solo in Marathon or against another bot in PvP.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-4 my-2">
+                <a href="#" class="card-link">
+                    <div class="card hover-shadow">
+                        <div class="card-body">
+                            <h4 class="card-title">Checkers</h4>
+                            <p class="card-text">Battle other bots in this classic board game.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+        crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+$(function () {
+  $(document).scroll(function () {
+    var $nav = $(".navbar");
+    $nav.toggleClass('scrolled', $(this).scrollTop() > $nav.height());
+  });
+});
+    </script>
 </body>
 
 </html>

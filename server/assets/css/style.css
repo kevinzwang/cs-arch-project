@@ -1,11 +1,117 @@
-@font-face {
-    font-family: 'Roboto'; /*a name to be used later*/
-    src: url('http://domain.com/fonts/font.ttf'); /*URL to font*/
+body  {
+    background: rgb(18, 0, 71);
+    background: linear-gradient(0deg, rgba(53,0,211,1) 0%, rgba(0,0,0,1) 100%);
+    font-family: 'Quicksand', sans-serif;
+    background-attachment: fixed;
 }
 
-body  {
-    background: rgb(53,0,211);
-    background: linear-gradient(0deg, rgba(53,0,211,1) 0%, rgba(0,0,0,1) 100%);
+#title {
+    margin-top: 9em;
+    margin-bottom: 6em;
+}
+
+#content {
+    margin-bottom: 6em;
+    box-shadow: 0 0.5rem 5rem rgba(0,0,0,0.6)!important
+}
+
+.navbar-nav {
+    margin-left: auto !important
+
+}
+
+.navbar-dark .navbar-nav .nav-link  {
     color: white;
-    font-family: 'Quicksand', sans-serif;
+    font-size: 18px
+}
+
+.navbar {
+    padding-left: 14em;
+    padding-right: 14em;
+    transition: 0.3s ease-in-out;
+}
+
+.navbar-brand {
+    font-size: 30px
+}
+
+.row {
+    margin-right: 0px;
+    margin-left: 0px;
+}
+
+.title {
+    margin-top: 0.5em
+}
+
+.hover-shadow {
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+    transition: box-shadow 0.15s ease-in-out
+}
+
+.hover-shadow:hover {
+    box-shadow: 0 .5rem 2rem rgba(0,0,0,.25)!important;
+}
+
+a.card-link {
+    color: black;
+}
+
+code {
+    padding-left: 2em !important;
+    background-color: transparent !important
+}
+
+.code-block {
+    margin-bottom: 2em;
+    background: rgb(18, 0, 71);
+    background: linear-gradient(0deg, rgb(23, 0, 92) 0%, rgb(15, 0, 59) 100%);
+}
+
+.navbar-dark .navbar-toggler {
+    border: none
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgb(255,255,255)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E") !important;
+}
+
+@media (max-width: 992px) {
+    .navbar {
+        background-color: white;
+        padding-top: 0.2em !important;
+        padding-bottom: 0.2em !important;
+        padding-left: 1em !important;
+        padding-right: 1em !important;
+        box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15)!important
+    }
+
+    .navbar-brand {
+        color:black !important;
+        font-size: 24px
+    }
+
+    .nav-link {
+        color:black !important
+    }
+
+    .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgb(0,0,0)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E") !important;
+    }
+}
+
+.navbar.scrolled {
+    background-color: white !important;
+    padding-top: 0.2em !important;
+    padding-bottom: 0.2em !important;
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15)!important
+}
+
+.navbar.scrolled .navbar-brand {
+    color:black !important;
+    font-size: 24px
+}
+
+.navbar.scrolled .nav-link {
+    color:black !important
 }
