@@ -7,7 +7,11 @@ body  {
 
 #title {
     margin-top: 9em;
-    margin-bottom: 6em;
+    position: fixed;
+    left: 50%;
+    top: 0%;
+    transform: translateX(-50%);
+    z-index:-1;
 }
 
 @keyframes fadeIn {
@@ -22,9 +26,10 @@ body  {
 }
 
 #content {
+    margin-top: 27em;
     margin-bottom: 6em;
     box-shadow: 0 0.5rem 5rem rgba(0,0,0,0.6)!important;
-    animation: 1s ease-out 0s 1 fadeIn;
+    animation: 0.8s ease-out 0s 1 fadeIn;
 }
 
 .navbar-nav {
@@ -115,6 +120,10 @@ code {
 
     .navbar-toggler-icon {
         background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgb(71, 42, 158) ' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E") !important;
+    }
+
+    #title {
+        margin-top: 5em;
     }
 }
 

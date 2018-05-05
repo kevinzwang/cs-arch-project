@@ -20,7 +20,7 @@
 </head>
 
 <body>
-    
+
     <nav class="navbar navbar-expand-lg fixed-top navbar-dark py-4">
         <a class="navbar-brand font-weight-bold" href="/">Bot Game</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-links" aria-controls="#navbar-links"
@@ -37,17 +37,51 @@
                     <a class="nav-link" href="#">Docs</a>
                 </li>
                 <li class="nav-item ml-2">
-                    <a class="nav-link" href="#">Github</a>
+                    <a class="nav-link" href="https://github.com/kevinzwang/cs-arch-project">Github</a>
                 </li>
                 <li class="nav-item ml-2">
-                    <a class="nav-link" href="#">Log In</a>
-                </li>
-                <li class="nav-item ml-2">
-                    <a class="nav-link" href="#">Sign Up</a>
+                    <a class="nav-link" data-toggle="modal" data-target="#loginModal">Log In / Sign Up</a>
                 </li>
             </ul>
         </div>
     </nav>
+
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <ul class="nav nav-tabs mb-4" id="modalTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="login-tab" data-toggle="tab" href="#login" role="tab" aria-controls="login" aria-selected="true">Log In</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="signup-tab" data-toggle="tab" href="#signup" role="tab" aria-controls="signup" aria-selected="false">Sign Up</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="modalTabContent">
+                        <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="login-tab">
+                            <form>
+                                <div class="form-group">
+                                    <label for="loginEmailInput">Email address</label>
+                                    <input type="email" class="form-control" id="loginEmailInput" aria-describedby="emailHelp" placeholder="Enter email">
+                                </div>
+                                <div class="form-group">
+                                    <label for="loginPasswordInput">Password</label>
+                                    <input type="password" class="form-control" id="loginPasswordInput" aria-describedby="pwHelp" placeholder="Enter password">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="tab-pane fade" id="signup" role="tabpanel" aria-labelledby="signup-tab">qwer
+                            <br>tyuiop</div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="container text-center text-white" id="title">
         <h1 class="m-5 font-weight-bold">A Game Framework Built to be Hacked</h1>
@@ -70,7 +104,7 @@
         <div class="row">
             <p>With Python, it's as easy as:</p>
         </div>
-        <div class="row code-block rounded shadow">
+        <div class="row code-block rounded shadow-lg">
             <pre><code>
 async def connect(uri):
     async with websockets.connect(uri) as websocket:
@@ -115,7 +149,7 @@ asyncio.get_event_loop().run_until_complete(
                 </a>
             </div>
         </div>
-        
+
     </div>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
@@ -126,12 +160,16 @@ asyncio.get_event_loop().run_until_complete(
         crossorigin="anonymous"></script>
 
     <script type="text/javascript">
-$(function () {
-  $(document).scroll(function () {
-    var $nav = $(".navbar");
-    $nav.toggleClass('scrolled', $(this).scrollTop() > 0);
-  });
-});
+        $(window).scroll(function () {
+            $("#title").css("top", -($(this).scrollTop()/3)+"px");
+            $("#title").css("opacity", 1 - $(window).scrollTop() / 250);
+        });
+        $(function () {
+            $(document).scroll(function () {
+                var $nav = $(".navbar");
+                $nav.toggleClass('scrolled', $(this).scrollTop() > 0);
+            });
+        });
     </script>
 </body>
 
