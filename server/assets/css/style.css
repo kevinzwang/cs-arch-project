@@ -142,3 +142,7 @@ code {
 .navbar.scrolled .nav-link {
     color:rgb(71, 42, 158)  !important
 }
+
+.grecaptcha-badge {
+    visibility: hidden
+}
