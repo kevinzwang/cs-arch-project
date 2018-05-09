@@ -33,16 +33,13 @@
         <div class="collapse navbar-collapse" id="navbar-links">
             <ul class="navbar-nav">
                 <li class="nav-item ml-2">
-                    <a class="nav-link" href="#">Games</a>
-                </li>
-                <li class="nav-item ml-2">
                     <a class="nav-link" href="#">Docs</a>
                 </li>
                 <li class="nav-item ml-2">
                     <a class="nav-link" href="https://github.com/kevinzwang/cs-arch-project">Github</a>
                 </li>
                 <li class="nav-item ml-2">
-                    <a class="nav-link" data-toggle="modal" data-target="#loginModal">Log In / Sign Up</a>
+                    <a class="nav-link" data-toggle="modal" data-target="#loginModal" onclick="resetModal()">Try It!</a>
                 </li>
             </ul>
         </div>
@@ -51,8 +48,16 @@
     <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Try it!</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
                 <div class="modal-body">
-                    <ul class="nav nav-tabs mb-4" id="modalTab" role="tablist">
+                    <button type="button" id="token-btn" class="btn btn-primary" onclick="genToken()">Generate Token</button>
+                    <p id="generated-token"></p>
+                    <!-- <ul class="nav nav-tabs mb-4" id="modalTab" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link active" id="login-tab" data-toggle="tab" href="#login" role="tab" aria-controls="login" aria-selected="true">Log In</a>
                         </li>
@@ -96,7 +101,10 @@
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                             </form>
                         </div>
-                    </div>
+                    </div> -->
+                </div>
+                <div class="modal-footer">
+                    <button id="close-modal-btn" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -189,6 +197,33 @@ asyncio.get_event_loop().run_until_complete(
                 $nav.toggleClass('scrolled', $(this).scrollTop() > 0);
             });
         });
+
+        function genToken() {
+            document.getElementById('token-btn').style.visibility = "hidden"
+            httpGetAsync("/new-token", outputToken)
+            document.getElementById('close-modal-btn').style.visibility = "visible"
+        }
+
+        function outputToken(text) {
+            var tokenOutput = document.getElementById('generated-token')
+            tokenOutput.innerHTML = "Token: " + text + "<br><br>(Note: Token expires in 24 hours)"
+        }
+
+        function httpGetAsync(theUrl, callback) {
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.onreadystatechange = function () {
+                if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+                    callback(xmlHttp.responseText);
+            }
+            xmlHttp.open("GET", theUrl, true); 
+            xmlHttp.send(null);
+        }
+
+        function resetModal() {
+            document.getElementById('token-btn').style.visibility = "visible"
+            document.getElementById('generated-token').innerHTML = ""
+            document.getElementById('close-modal-btn').style.visibility = "hidden"
+        }
     </script>
 </body>
 
