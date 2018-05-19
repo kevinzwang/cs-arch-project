@@ -64,12 +64,12 @@ body  {
 }
 
 .hover-shadow {
-    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
-    transition: box-shadow 0.15s ease-in-out
+    box-shadow: 0 .3rem .8rem rgba(0,0,0,.15)!important;
+    transition: box-shadow 0.2s ease-in-out
 }
 
 .hover-shadow:hover {
-    box-shadow: 0 .5rem 2rem rgba(0,0,0,.25)!important;
+    box-shadow: 0 .5rem 1.2rem rgba(0,0,0,.2)!important;
 }
 
 a.card-link {
