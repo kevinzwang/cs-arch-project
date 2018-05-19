@@ -1,0 +1,162 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+    <title>Connect Four Docs</title>
+    <style>
+        body {
+            padding-left: 1rem
+        }
+
+        td,
+        th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Connect Four Docs</h1>
+    <p>All communications happen using JSON objects.</p>
+    <h2>Authentication</h2>
+    <p>First whacha gotta do is authenticate your connection. Grab a token from the home page.</p>
+    <p>You then pass that into the connection via JSON object:</p>
+    <table>
+        <tr>
+            <th>Field</th>
+            <th>Type</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>token</td>
+            <td>integer</td>
+            <td>the token you obtained</td>
+        </tr>
+    </table>
+    <p>The server will then return a JSON object with:</p>
+    <table>
+        <tr>
+            <th>Field</th>
+            <th>Type</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>status</td>
+            <td>string</td>
+            <td>is either "connected" or "failure"</td>
+        </tr>
+        <tr>
+            <td>message</td>
+            <td>string</td>
+            <td>if the status is "failure", this gives a more detailed message on the failure</td>
+        </tr>
+    </table>
+    <p>If the status is connected, then you're all set and you'll be waiting in queue to play!</p>
+    <h2>Gameplay</h2>
+    <p>Once you are matched with another player, the server sends once:</p>
+    <table>
+        <tr>
+            <th>Field</th>
+            <th>Type</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>status</td>
+            <td>string</td>
+            <td>"start" or "failure"</td>
+        </tr>
+        <tr>
+            <td>player</td>
+            <td>integer</td>
+            <td>The player number, either 1 or 2, that you are. Used for the connect 4 board. Player 1 goes first, 2 goes second.</td>
+        </tr>
+        <tr>
+            <td>message</td>
+            <td>string</td>
+            <td>if the status is "failure", this gives a more detailed message on the failure</td>
+        </tr>
+    </table>
+    <p>On your turn, the server gives:</p>
+    <table>
+        <tr>
+            <th>Field</th>
+            <th>Type</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>status</td>
+            <td>string</td>
+            <td>"playing" or "failure"</td>
+        </tr>
+        <tr>
+            <td>message</td>
+            <td>string</td>
+            <td>"Your turn!" if it's your turn, or an error message of status is "failure"</td>
+        </tr>
+        <tr>
+            <td>board</td>
+            <td>integer array</td>
+            <td>A 6 x 7 array representing the current connect 4 board.
+                <br>0 means there's no piece, 1 means a piece placed by player 1, and 2 for player 2.</td>
+        </tr>
+    </table>
+    <p>You then have 15 seconds to respond with your move.</p>
+    <table>
+        <tr>
+            <th>Field</th>
+            <th>Type</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>move</td>
+            <td>integer</td>
+            <td>A number between 0 and 6 representing your move.</td>
+        </tr>
+    </table>
+    <p>WARNING: If the number is not between 0 or 6 or if the column is already full, you automatically lose, and the server
+        sends this to both players:</p>
+    <table>
+        <tr>
+            <th>Field</th>
+            <th>Type</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>status</td>
+            <td>string</td>
+            <td>"failure"</td>
+        </tr>
+        <tr>
+            <td>message</td>
+            <td>string</td>
+            <td>a more detailed message on the failure</td>
+        </tr>
+    </table>
+    <p>Once one player wins, or there is a tie, the server sends:</p>
+    <table>
+        <tr>
+            <th>Field</th>
+            <th>Type</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>status</td>
+            <td>string</td>
+            <td>"win", "lose", or "tie"</td>
+        </tr>
+        <tr>
+                <td>board</td>
+                <td>integer array</td>
+                <td>same as board field specified before</td>
+            </tr>
+    </table>
+</body>
+
+</html>
