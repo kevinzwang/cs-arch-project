@@ -55,7 +55,7 @@ func DocsHandler(w http.ResponseWriter, r *http.Request) {
 
 // GameHandler handles API calls for games
 func GameHandler(w http.ResponseWriter, r *http.Request) {
-	gameName := mux.Vars(r)["Name"]
+	gameName := mux.Vars(r)["game"]
 
 	var gameStruct games.Game
 	switch gameName {
@@ -71,7 +71,6 @@ func GameHandler(w http.ResponseWriter, r *http.Request) {
 		log.Print("upgrade error: ", err)
 		return
 	}
-	defer conn.Close()
 
 	token, ok := authenticate(conn)
 	if !ok {
@@ -83,13 +82,13 @@ func GameHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func authenticate(conn *websocket.Conn) (int64, bool) {
-	var msg map[interface{}]interface{}
+	var msg map[string]interface{}
 	err := conn.ReadJSON(&msg)
 	if err != nil {
 		log.Print("read json error: ", err)
 		conn.WriteJSON(map[string]interface{}{
-			"status": "failure",
-			"error":  "Couldn't read JSON",
+			"status":  "failure",
+			"message": "Couldn't read JSON",
 		})
 		return 0, false
 	}
@@ -97,8 +96,8 @@ func authenticate(conn *websocket.Conn) (int64, bool) {
 	token, ok := msg["token"]
 	if !ok {
 		conn.WriteJSON(map[string]interface{}{
-			"status": "failure",
-			"error":  "Couldn't get token from JSON",
+			"status":  "failure",
+			"message": "Couldn't get token from JSON",
 		})
 		return 0, false
 	}
@@ -109,16 +108,16 @@ func authenticate(conn *websocket.Conn) (int64, bool) {
 
 	if !ok {
 		conn.WriteJSON(map[string]interface{}{
-			"status": "failure",
-			"error":  "No such token",
+			"status":  "failure",
+			"message": "No such token",
 		})
 		return 0, false
 	}
 
 	if playing {
 		conn.WriteJSON(map[string]interface{}{
-			"status": "failure",
-			"error":  "Already an instance playing",
+			"status":  "failure",
+			"message": "Already an instance playing",
 		})
 		return 0, false
 	}
@@ -127,12 +126,13 @@ func authenticate(conn *websocket.Conn) (int64, bool) {
 	if dt > 172800 {
 		delete(tokens, fmtToken)
 		conn.WriteJSON(map[string]interface{}{
-			"status": "failure",
-			"error":  "Token has expired",
+			"status":  "failure",
+			"message": "Token has expired",
 		})
 		return 0, false
 	}
 
+	time.Sleep(2 * time.Second)
 	tokens[fmtToken] = true
 	conn.WriteJSON(map[string]interface{}{
 		"status": "connected",

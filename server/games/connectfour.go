@@ -1,7 +1,7 @@
 package games
 
 import (
-	"strconv"
+	"time"
 
 	"github.com/gorilla/websocket"
 )
@@ -20,8 +20,6 @@ func (game *ConnectFour) Execute(conn *websocket.Conn) {
 	}
 }
 
-// func chanReadMessage(conn *websocket.Conn, )
-
 func (game *ConnectFour) play(p1 *websocket.Conn, p2 *websocket.Conn) int {
 	players := [2]*websocket.Conn{p1, p2}
 	for i, p := range players {
@@ -29,6 +27,7 @@ func (game *ConnectFour) play(p1 *websocket.Conn, p2 *websocket.Conn) int {
 			"status": "start",
 			"player": i + 1,
 		})
+		defer p.Close()
 	}
 
 	board := [][]int{
@@ -50,13 +49,27 @@ func (game *ConnectFour) play(p1 *websocket.Conn, p2 *websocket.Conn) int {
 			"status":  "playing",
 		})
 
-		_, message, err := curr.ReadMessage()
-		if err != nil {
+		var msg map[string]interface{}
+		resp := make(chan map[string]interface{})
+		go chanReadJSON(curr, resp)
+
+		select {
+		case msg = <-resp:
+		case <-time.After(15 * time.Second):
+			curr.WriteJSON(map[string]interface{}{
+				"message": "took too long to respond",
+				"status":  "failure",
+			})
+			other.WriteJSON(map[string]interface{}{
+				"message": "Opponent took too long to respond",
+				"status":  "failure",
+			})
 			break
 		}
 
-		column, err := strconv.Atoi(string(message))
-		if err != nil {
+		foo, ok := msg["move"].(float64)
+		column := int(foo)
+		if !ok {
 			curr.WriteJSON(map[string]interface{}{
 				"message": "Not a number",
 				"status":  "failure",
@@ -112,7 +125,6 @@ func (game *ConnectFour) play(p1 *websocket.Conn, p2 *websocket.Conn) int {
 			return (turn + 1) % 2
 		}
 	}
-	return 0
 }
 
 var directions = [][]int{

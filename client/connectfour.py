@@ -2,54 +2,58 @@ import asyncio
 import websockets
 import json
 
-# change to actual uri once kevin has deployed server 
-uri = 'ws://35.197.29.97:8080/api/connectfour'
+uri = 'ws://localhost:8080/api/connectfour'
+# token = 1526776854
 
 async def connect(uri):
     async with websockets.connect(uri) as websocket:
-        # await websocket.send("{ \"hi\":\"hello\"}")
-        print("connected")
+        token = input("token: ")
+        await websocket.send(json.dumps({"token": int(token)}))
         connectMsg = await websocket.recv()
         connectParsed = json.loads(connectMsg)
 
         if connectParsed['status'] != 'connected':
-            print('Error: ' + connectParsed['message'])
+            print('Failure to connect: ' + connectParsed['message'])
             return
         
-        playerNum = connectParsed['player']
-        await play(websocket, playerNum)
-            
-async def run(websocket, player):
-
-    while True:
-        msg = await websocket.recv()
-        parsed = json.loads(msg)
-
-        if parsed['status'] != 'playing':
-            if parsed['status'] == 'error':
-                print('Error: ' + parsed['message'])
-            
-            if parsed['status'] == 'win':
-                print('You won!')
-            
-            if parsed['status'] == 'lose':
-                print('You lost :\'(')
-
+        print('connected!')
+        
+        startMsg = await websocket.recv()
+        startParsed = json.loads(startMsg)
+        if startParsed['status'] != 'start':
+            print('Failure to start: ' + startParsed['message'])
             return
         
-        board = parsed['board']
+        player = int(startParsed['player'])
+        print('player: ' + str(player) + '\n')
 
-        for i in range(len(board) - 1, -1, -1):
-            line = ''
-            for j in range(len(board[0])):
-                line += str(board[i][j]) + ' '
-            print(line)
+        while True:
+            turnMsg = await websocket.recv()
+            turnParsed = json.loads(turnMsg)
+            
+            if turnParsed['status'] != 'playing':
+                if turnParsed['status'] == 'win':
+                    print('you won!')
+                elif turnParsed['status'] == 'lose':
+                    print('you lost.')
+                elif turnParsed['status'] == 'failure':
+                    print('failure: ' + turnParsed['message'])
+                else:
+                    print('unknown problem: ' + turnParsed['status'] + ' - ' + turnParsed['message'])
+                return
 
-        placeColumn = play(board, player)
-        print('placed in column ' + str(placeColumn) + '\n')
+            printboard(turnParsed['board'])
+            
+            move = play(player, turnParsed['board'])
+            await websocket.send(json.dumps({'move': move}))
 
-        await websocket.send(str(placeColumn))
-
+def printboard(board):
+    for row in reversed(board):
+        r = ''
+        for column in row:
+            r += str(column)
+        print(r)
+    print()
 
 """
 Complete this function, which actually plays the game.
@@ -58,7 +62,7 @@ Complete this function, which actually plays the game.
 :param player: the player number, either 1 or 2, that you are, corresponding to the numbers on board
 :return: a number between 0 and 6 representing the column the program chooses to put its piece
 """
-def play(board, player):
+def play(player, board):
     return 6
 
 asyncio.get_event_loop().run_until_complete(
