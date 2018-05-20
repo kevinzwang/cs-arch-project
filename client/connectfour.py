@@ -2,7 +2,7 @@ import asyncio
 import websockets
 import json
 
-uri = 'ws://35.197.29.97:8080//api/connectfour'
+uri = 'ws://35.197.29.97:8080/api/connectfour'
 
 async def connect(uri):
     async with websockets.connect(uri) as websocket:
