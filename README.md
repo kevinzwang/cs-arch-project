@@ -1,6 +1,8 @@
 # CS Arch Final Project - Bot Game
 by Kevin Wang
 
+![screenshot of website](screenshot.png)
+
 ## Intro
 
 This repo contains the server and client implementations of a framework that I made to allow people to easily create "bots" for games such as connect 4 and tetris. 
