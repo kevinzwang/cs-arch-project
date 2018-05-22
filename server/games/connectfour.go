@@ -20,7 +20,7 @@ func (game *ConnectFour) Execute(conn *websocket.Conn) {
 	}
 }
 
-func (game *ConnectFour) play(p1 *websocket.Conn, p2 *websocket.Conn) int {
+func (game *ConnectFour) play(p1 *websocket.Conn, p2 *websocket.Conn) *websocket.Conn {
 	players := [2]*websocket.Conn{p1, p2}
 	for i, p := range players {
 		p.WriteJSON(map[string]interface{}{
@@ -39,7 +39,7 @@ func (game *ConnectFour) play(p1 *websocket.Conn, p2 *websocket.Conn) int {
 		{0, 0, 0, 0, 0, 0, 0},
 	}
 
-	for turn := 0; ; turn = (turn + 1) % 2 {
+	for turn, count := 0, 0; count < 42; turn, count = (turn+1)%2, count+1 {
 		curr := players[turn]
 		other := players[(turn+1)%2]
 
@@ -78,7 +78,7 @@ func (game *ConnectFour) play(p1 *websocket.Conn, p2 *websocket.Conn) int {
 				"message": "Opponent dun a goof",
 				"status":  "failure",
 			})
-			return (turn+1)%2 + 1
+			return other
 		}
 		if column < 0 || column > 6 {
 			curr.WriteJSON(map[string]interface{}{
@@ -89,7 +89,7 @@ func (game *ConnectFour) play(p1 *websocket.Conn, p2 *websocket.Conn) int {
 				"message": "Opponent dun a goof",
 				"status":  "failure",
 			})
-			return (turn+1)%2 + 1
+			return other
 		}
 
 		row := -1
@@ -110,7 +110,7 @@ func (game *ConnectFour) play(p1 *websocket.Conn, p2 *websocket.Conn) int {
 				"message": "Opponent dun a goof",
 				"status":  "failure",
 			})
-			return (turn+1)%2 + 1
+			return other
 		}
 
 		if checkWin(board, turn+1, row, column) {
@@ -122,9 +122,17 @@ func (game *ConnectFour) play(p1 *websocket.Conn, p2 *websocket.Conn) int {
 				"status": "lose",
 				"board":  board,
 			})
-			return (turn + 1) % 2
+			return curr
 		}
 	}
+
+	for _, p := range players {
+		p.WriteJSON(map[string]interface{}{
+			"status": "tie",
+			"board":  board,
+		})
+	}
+	return nil
 }
 
 var directions = [][]int{

@@ -15,7 +15,7 @@ Due to the time constraints, only the Connect 4 game is completed, and authentic
 
 ## Getting Started
 
-The server is hosted on http://35.197.29.97:8080/. A full implementation of the provided API is in `client/connectfour.py`, which requires Python 3.5+ to run and also the package `websockets` which can be installed with `python3 -m pip install websockets`. All you need to do to play is implement `def play()`, grab a token from the website and set the variable `token` to it, and run it.
+The server is hosted on http://35.197.29.97:8080/. A full implementation of the provided API is in `client/connectfour.py`, which requires Python 3.5+ to run and also the package `websockets` which can be installed with `python3 -m pip install websockets`. All you need to do to play is implement `def play()`, grab a token from the website, run the program, and enter the token in when prompted.
 
 
 If you would like to host the server yourself, you first need the latest version of Golang (can be found [here](https://golang.org/)) and the command line tool `make`. Navigate to the `server` folder and run 
