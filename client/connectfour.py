@@ -1,6 +1,8 @@
 import asyncio
 import websockets
 import json
+import copy
+from random import randint
 
 uri = 'ws://35.197.29.97:8080/api/connectfour'
 
@@ -39,6 +41,8 @@ async def connect(uri):
                     print('failure: ' + turnParsed['message'])
                 else:
                     print('unknown problem: ' + turnParsed['status'] + ' - ' + turnParsed['message'])
+
+                print('go here to watch a replay of the game: ' + turnParsed['replay'])
                 return
 
             printboard(turnParsed['board'])
@@ -62,7 +66,10 @@ Complete this function, which actually plays the game.
 :return: a number between 0 and 6 representing the column the program chooses to put its piece
 """
 def play(player, board):
-    return 6
+    while True:
+        choice = randint(0, 6)
+        if board[5][choice] == 0:
+            return choice
 
 asyncio.get_event_loop().run_until_complete(
     connect(uri))

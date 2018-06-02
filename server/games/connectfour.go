@@ -1,6 +1,7 @@
 package games
 
 import (
+	"strconv"
 	"time"
 
 	"github.com/gorilla/websocket"
@@ -20,15 +21,16 @@ func (game *ConnectFour) Execute(conn *websocket.Conn) {
 	}
 }
 
+var replays = make(map[int64][42]int)
+
+// C4Replay gives the replay info for a Connect 4 game
+func C4Replay(token int64) (moves [42]int, ok bool) {
+	moves, ok = replays[token]
+	return
+}
+
 func (game *ConnectFour) play(p1 *websocket.Conn, p2 *websocket.Conn) *websocket.Conn {
 	players := [2]*websocket.Conn{p1, p2}
-	for i, p := range players {
-		p.WriteJSON(map[string]interface{}{
-			"status": "start",
-			"player": i + 1,
-		})
-		defer p.Close()
-	}
 
 	board := [][]int{
 		{0, 0, 0, 0, 0, 0, 0},
@@ -39,7 +41,21 @@ func (game *ConnectFour) play(p1 *websocket.Conn, p2 *websocket.Conn) *websocket
 		{0, 0, 0, 0, 0, 0, 0},
 	}
 
-	for turn, count := 0, 0; count < 42; turn, count = (turn+1)%2, count+1 {
+	var moves [42]int
+	t := time.Now().Unix()
+	replayLink := "http://35.197.29.97:8080/replay/connectfour/" + strconv.FormatInt(t, 10)
+	defer func() { replays[t] = moves }()
+
+	for i, p := range players {
+		p.WriteJSON(map[string]interface{}{
+			"status": "start",
+			"player": i + 1,
+		})
+		defer p.Close()
+	}
+
+	count := 0
+	for turn := 0; count < 42; turn, count = (turn+1)%2, count+1 {
 		curr := players[turn]
 		other := players[(turn+1)%2]
 
@@ -59,12 +75,15 @@ func (game *ConnectFour) play(p1 *websocket.Conn, p2 *websocket.Conn) *websocket
 			curr.WriteJSON(map[string]interface{}{
 				"message": "took too long to respond",
 				"status":  "failure",
+				"replay":  replayLink,
 			})
 			other.WriteJSON(map[string]interface{}{
 				"message": "Opponent took too long to respond",
 				"status":  "failure",
+				"replay":  replayLink,
 			})
-			break
+			moves[count] = -1
+			return other
 		}
 
 		foo, ok := msg["move"].(float64)
@@ -73,22 +92,28 @@ func (game *ConnectFour) play(p1 *websocket.Conn, p2 *websocket.Conn) *websocket
 			curr.WriteJSON(map[string]interface{}{
 				"message": "Not a number",
 				"status":  "failure",
+				"replay":  replayLink,
 			})
 			other.WriteJSON(map[string]interface{}{
 				"message": "Opponent dun a goof",
 				"status":  "failure",
+				"replay":  replayLink,
 			})
+			moves[count] = -1
 			return other
 		}
 		if column < 0 || column > 6 {
 			curr.WriteJSON(map[string]interface{}{
 				"message": "Number must be in range 0 to 6.",
 				"status":  "failure",
+				"replay":  replayLink,
 			})
 			other.WriteJSON(map[string]interface{}{
 				"message": "Opponent dun a goof",
 				"status":  "failure",
+				"replay":  replayLink,
 			})
+			moves[count] = -1
 			return other
 		}
 
@@ -105,23 +130,31 @@ func (game *ConnectFour) play(p1 *websocket.Conn, p2 *websocket.Conn) *websocket
 			curr.WriteJSON(map[string]interface{}{
 				"message": "Column already full",
 				"status":  "failure",
+				"replay":  replayLink,
 			})
 			other.WriteJSON(map[string]interface{}{
 				"message": "Opponent dun a goof",
 				"status":  "failure",
+				"replay":  replayLink,
 			})
+			moves[count] = -1
 			return other
 		}
+
+		moves[count] = column
 
 		if checkWin(board, turn+1, row, column) {
 			curr.WriteJSON(map[string]interface{}{
 				"status": "win",
 				"board":  board,
+				"replay": replayLink,
 			})
 			other.WriteJSON(map[string]interface{}{
 				"status": "lose",
 				"board":  board,
+				"replay": replayLink,
 			})
+			moves[count+1] = -1
 			return curr
 		}
 	}
@@ -130,8 +163,10 @@ func (game *ConnectFour) play(p1 *websocket.Conn, p2 *websocket.Conn) *websocket
 		p.WriteJSON(map[string]interface{}{
 			"status": "tie",
 			"board":  board,
+			"replay": replayLink,
 		})
 	}
+	moves[count+1] = -1
 	return nil
 }
 

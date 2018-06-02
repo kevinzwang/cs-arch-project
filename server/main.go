@@ -1,10 +1,12 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"log"
 	"net/http"
+	"strconv"
 	"time"
 
 	"./games"
@@ -22,7 +24,7 @@ func main() {
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
 
 	r.HandleFunc("/api/{game}", GameHandler)
-	r.HandleFunc("/view/{game}/{token}", ViewHandler)
+	r.HandleFunc("/replay/connectfour/{token:[0-9]+}", C4ReplayHandler)
 	r.HandleFunc("/new-token", TokenGenerateHandler)
 	r.HandleFunc("/list-tokens", ListTokenHandler)
 	r.HandleFunc("/docs/{game}", DocsHandler)
@@ -38,12 +40,43 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl.Execute(w, nil)
 }
 
-// ViewHandler allows you to view the game
-func ViewHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "Game: "+mux.Vars(r)["game"])
-	fmt.Fprintln(w, "Token: "+mux.Vars(r)["token"])
+// C4ReplayData contains data about a connect four game
+type C4ReplayData struct {
+	Data string
 }
 
+// C4ReplayHandler allows you to view the game
+func C4ReplayHandler(w http.ResponseWriter, r *http.Request) {
+	tmpl, err := template.ParseFiles("website/templates/replay/connectfour" + ".html")
+	if err != nil {
+		http.NotFound(w, r)
+		return
+	}
+
+	token, err := strconv.ParseInt(mux.Vars(r)["token"], 10, 64)
+	if err != nil {
+		http.NotFound(w, r)
+		return
+	}
+
+	replay, ok := games.C4Replay(token)
+	if !ok {
+		http.NotFound(w, r)
+		return
+	}
+
+	jsonReplay, err := json.Marshal(replay)
+	if err != nil {
+		http.NotFound(w, r)
+		return
+	}
+
+	rd := C4ReplayData{string(jsonReplay)}
+
+	tmpl.Execute(w, rd)
+}
+
+// DocsHandler shows the documentation for the API pages
 func DocsHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles("website/templates/docs/" + mux.Vars(r)["game"] + ".html")
 	if err != nil {
@@ -53,15 +86,17 @@ func DocsHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl.Execute(w, nil)
 }
 
+var gameStructs = map[string]games.Game{
+	"connectfour": &games.ConnectFour{},
+}
+
 // GameHandler handles API calls for games
 func GameHandler(w http.ResponseWriter, r *http.Request) {
 	gameName := mux.Vars(r)["game"]
 
 	var gameStruct games.Game
-	switch gameName {
-	case "connectfour":
-		gameStruct = &games.ConnectFour{}
-	default:
+	gameStruct, ok := gameStructs[gameName]
+	if !ok {
 		w.WriteHeader(http.StatusNotFound)
 		return
 	}

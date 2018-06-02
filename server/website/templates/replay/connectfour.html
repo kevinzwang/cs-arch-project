@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Connect 4 Replay</title>
+</head>
+
+<body onload="setup();">
+    <canvas id="board" width="730" height="630"></canvas>
+    <br>
+    <button type="button" onclick="back()" class="inactive" id="back">&lt;</button>
+    <button type="button" onclick="forward()" id="forward">&gt;</button>
+</body>
+
+<script>
+    var moves = JSON.parse('{{.Data}}')
+    var canvas = document.getElementById('board');
+    var ctx = canvas.getContext('2d');
+
+    var move = 0
+    var turn = 0
+    var board = [
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0],
+    ]
+
+    var radius = 40
+    var padding = 15
+
+    function setup() {
+        ctx.fillStyle = 'black'
+        ctx.fillRect(0, 0, 730, 630)
+
+        for (var i = 0; i < 7; i++) {
+            for (var j = 0; j < 6; j++) {
+                drawCircle(i, j, 0)
+            }
+        }
+    }
+
+    function draw(increment) {
+        var toModify = move
+
+        if (increment == 1) {
+            toModify++
+        }
+
+        move += increment
+
+        let i = 0
+
+        if (increment == 1) {
+            for (i = 0; i < 6; i++) {
+                if (i == 5 || board[i + 1][moves[toModify]] != 0) {
+                    board[i][moves[toModify]] = turn + 1
+                    break
+                }
+            }
+        } else {
+            for (i = 0; i < 6; i++) {
+                if (board[i][moves[toModify]] != 0) {
+                    board[i][moves[toModify]] = 0
+                    break
+                }
+            }
+        }
+
+        drawCircle(moves[toModify], i, board[i][moves[toModify]])
+
+        turn = (turn + 1) % 2
+
+        if (move == 0) {
+            document.getElementById("back").classList.add("inactive")
+        } else if (move == 41 || moves[move + 1] == -1) {
+            document.getElementById("forward").classList.add("inactive")
+        }
+    }
+
+    function drawCircle(x, y, color) {
+        ctx.beginPath();
+
+        switch (color) {
+            case 0:
+                ctx.fillStyle = "white"
+                break;
+            case 1:
+                ctx.fillStyle = "red"
+                break;
+            case 2:
+                ctx.fillStyle = "blue"
+                break;
+            default:
+                return;
+        }
+
+        ctx.arc(x * 100 + 50 + padding, y * 100 + 50 + padding, radius, 0, Math.PI * 2)
+        ctx.fill()
+    }
+
+    function back() {
+        if (!document.getElementById("back").classList.contains("inactive")) {
+            document.getElementById("forward").classList.remove("inactive")
+            draw(-1)
+        }
+    }
+
+    function forward() {
+        if (!document.getElementById("forward").classList.contains("inactive")) {
+            document.getElementById("back").classList.remove("inactive")
+            draw(1)
+        }
+    }
+</script>
+
+<style>
+    button {
+        height: 1.5em;
+        width: 1.5em;
+        font-size: 20pt;
+    }
+
+    .inactive {
+        color: lightgray
+    }
+</style>
+
+</html>
