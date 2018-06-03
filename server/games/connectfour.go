@@ -166,7 +166,10 @@ func (game *ConnectFour) play(p1 *websocket.Conn, p2 *websocket.Conn) *websocket
 			"replay": replayLink,
 		})
 	}
-	moves[count+1] = -1
+	if count < len(moves)-1 {
+		moves[count+1] = -1
+	}
+
 	return nil
 }
 
