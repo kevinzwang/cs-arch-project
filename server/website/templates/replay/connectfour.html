@@ -17,7 +17,7 @@
     var canvas = document.getElementById('board');
     var ctx = canvas.getContext('2d');
 
-    var move = 0
+    var move = -1
     var turn = 0
     var board = [
         [0, 0, 0, 0, 0, 0, 0],
@@ -73,7 +73,7 @@
 
         turn = (turn + 1) % 2
 
-        if (move == 0) {
+        if (move == -1) {
             document.getElementById("back").classList.add("inactive")
         } else if (move == 41 || moves[move + 1] == -1) {
             document.getElementById("forward").classList.add("inactive")
