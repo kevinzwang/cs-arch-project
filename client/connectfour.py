@@ -37,6 +37,8 @@ async def connect(uri):
                     print('you won!')
                 elif turnParsed['status'] == 'lose':
                     print('you lost.')
+                elif turnParsed['status'] == 'tie':
+                    print('you tied')
                 elif turnParsed['status'] == 'failure':
                     print('failure: ' + turnParsed['message'])
                 else:
